@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package goodbye;
+
+option go_package = "pb/goodbye";
+
+service Greeter {
+  rpc SayBye (ByeRequest) returns (ByeReply) {}
+}
+
+message ByeRequest {
+  string name = 1;
+}
+
+message ByeReply {
+  string message = 1;
+}
