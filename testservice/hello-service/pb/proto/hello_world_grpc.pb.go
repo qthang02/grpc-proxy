@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: proto/goodbye.proto
+// source: proto/hello_world.proto
 
-package goodbye
+package helloworld
 
 import (
 	context "context"
@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Greeter_SayBye_FullMethodName = "/goodbye.Greeter/SayBye"
+	Greeter_SayHello_FullMethodName = "/helloworld.Greeter/SayHello"
 )
 
 // GreeterClient is the client API for Greeter service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GreeterClient interface {
-	SayBye(ctx context.Context, in *ByeRequest, opts ...grpc.CallOption) (*ByeReply, error)
+	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
 }
 
 type greeterClient struct {
@@ -37,9 +37,9 @@ func NewGreeterClient(cc grpc.ClientConnInterface) GreeterClient {
 	return &greeterClient{cc}
 }
 
-func (c *greeterClient) SayBye(ctx context.Context, in *ByeRequest, opts ...grpc.CallOption) (*ByeReply, error) {
-	out := new(ByeReply)
-	err := c.cc.Invoke(ctx, Greeter_SayBye_FullMethodName, in, out, opts...)
+func (c *greeterClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error) {
+	out := new(HelloReply)
+	err := c.cc.Invoke(ctx, Greeter_SayHello_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,15 +50,15 @@ func (c *greeterClient) SayBye(ctx context.Context, in *ByeRequest, opts ...grpc
 // All implementations should embed UnimplementedGreeterServer
 // for forward compatibility
 type GreeterServer interface {
-	SayBye(context.Context, *ByeRequest) (*ByeReply, error)
+	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
 }
 
 // UnimplementedGreeterServer should be embedded to have forward compatible implementations.
 type UnimplementedGreeterServer struct {
 }
 
-func (UnimplementedGreeterServer) SayBye(context.Context, *ByeRequest) (*ByeReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayBye not implemented")
+func (UnimplementedGreeterServer) SayHello(context.Context, *HelloRequest) (*HelloReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
 
 // UnsafeGreeterServer may be embedded to opt out of forward compatibility for this service.
@@ -72,20 +72,20 @@ func RegisterGreeterServer(s grpc.ServiceRegistrar, srv GreeterServer) {
 	s.RegisterService(&Greeter_ServiceDesc, srv)
 }
 
-func _Greeter_SayBye_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ByeRequest)
+func _Greeter_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HelloRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GreeterServer).SayBye(ctx, in)
+		return srv.(GreeterServer).SayHello(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Greeter_SayBye_FullMethodName,
+		FullMethod: Greeter_SayHello_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterServer).SayBye(ctx, req.(*ByeRequest))
+		return srv.(GreeterServer).SayHello(ctx, req.(*HelloRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -94,14 +94,14 @@ func _Greeter_SayBye_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Greeter_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "goodbye.Greeter",
+	ServiceName: "helloworld.Greeter",
 	HandlerType: (*GreeterServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SayBye",
-			Handler:    _Greeter_SayBye_Handler,
+			MethodName: "SayHello",
+			Handler:    _Greeter_SayHello_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/goodbye.proto",
+	Metadata: "proto/hello_world.proto",
 }
