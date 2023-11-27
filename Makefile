@@ -1,8 +1,8 @@
 hello-service:
-	go run testserver/hello-service/main.go
+	go run testservice/hello-service/main.go
 
 auth-service:
-	go run testserver/auth-service/main.go
+	go run testservice/auth-service/main.go
 
 gateway:
 	go run main.go
