@@ -3,13 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"net"
+	helloworld "private-gateway/testservice/hello-service/pb/proto"
+	"strings"
+
 	"github.com/golang-jwt/jwt/v5"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
-	"log"
-	"net"
-	helloworld "private-gateway/testservice/hello-service/pb/proto"
 )
 
 type server struct {
@@ -18,12 +20,8 @@ type server struct {
 func (s *server) SayHello(ctx context.Context, in *helloworld.HelloRequest) (*helloworld.HelloReply, error) {
 
 	if md, ok := metadata.FromIncomingContext(ctx); ok {
-		log.Println("md: ", md)
-
 		if val, exists := md["authorization"]; exists {
-			fmt.Println("authorization: ", val)
-
-			token := val[0]
+			token := strings.TrimPrefix(val[0], "Bearer ")
 
 			sub, err := ValidateToken(token, "secret")
 			if err != nil {
@@ -34,8 +32,9 @@ func (s *server) SayHello(ctx context.Context, in *helloworld.HelloRequest) (*he
 			if !ok {
 				return &helloworld.HelloReply{Message: "invalid sub"}, nil
 			}
+			in.Name = name
 
-			return &helloworld.HelloReply{Message: "Hello " + name + "!"}, nil
+			return &helloworld.HelloReply{Message: "Hello " + in.Name + "!"}, nil
 		}
 	}
 
