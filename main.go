@@ -50,7 +50,7 @@ func director(ctx context.Context, fullMethodName string) (context.Context, *grp
 
 	switch {
 	case strings.HasPrefix(fullMethodName, "/helloworld.Greeter/"):
-		conn, err = getConnection(ctx, store, "localhost:8081")
+		conn, err = getConnection(ctx, store, "localhost:8080")
 	case strings.HasPrefix(fullMethodName, "/auth.AuthService/"):
 		conn, err = getConnection(ctx, store, "localhost:8081")
 	default:
